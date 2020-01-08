@@ -1,0 +1,30 @@
+<div class="right" *ngIf="favorites">
+  <h3 class="text-center my-8 alert alert-primary">Favorites</h3>
+  <div class="container">
+    <div class="card-columns">
+     
+      <div [@listAnimation]="(favorites| async)?.length">
+        <div *ngFor="let favorite of favorites | async; let i = index">
+          <div class="card bg-light mb-3" style="width: 18rem;">
+            <div class="card-header">{{ favorite.name }}</div>
+            <div class="card-body">
+              <p class="card-text">Current Weather:  {{ favorite.currentWeather }}C</p>
+              <div class="card-footer bg-transparent border-success"> <button class="btn btn-outline-primary "
+                  (click)="showInHome(favorite.name,favorite.idKey)">Show details</button></div>
+              <div class="card-footer bg-transparent border-success"> <button class="btn btn-outline-danger"
+                  (click)="delFavorite(i)">Delete From Favorites</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div >
+    <h3 class="text-center my-8 alert alert-light">Add Favorites <button [routerLink]="['/']" routerLinkActive="router-link-active" class="btn btn-outline-primary">Go To Home Page</button></h3>
+  
+</div>
+
+
+<notifier-container></notifier-container>

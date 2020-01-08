@@ -1,0 +1,72 @@
+<br>
+<div class="container center-xs flex-grid ">
+    <div class="row align-items-center justify-content-center ">
+        <div class="header">
+            <h3 class="text-center my-8 alert alert-primary">Search for Weather By City Name: <button
+                    class="btn btn-outline-primary align-items-center " (click)="getLocation()">Show Weather By
+                    Current Location</button></h3>
+            <form [formGroup]="weatherSearchForm">
+                <mat-form-field class="container">
+                    <input type="text" id="weatherLocation" aria-describedby="weatherLocation"
+                        formControlName="location" placeholder="Please input a Location" matInput
+                        [formControl]="searchTerm" [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let city of myCitys" [value]="city.LocalizedName"
+                            (onSelectionChange)="sendToAPIXU(city.LocalizedName)">
+                            {{ city.LocalizedName }}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </form>
+        </div>
+    </div>
+</div>
+<br><br>
+
+<div class="container">
+    <div class="row align-items-center justify-content-center">
+        <div class="bgWhite" *ngIf="weatherData">
+            <h3 class="text-center my-8 alert alert-primary"> City-
+                {{ apixuService.cityName }} <button class=" btn btn-outline-primary align-items-center"
+                    (click)="addFavorite(apixuService.cityName,apixuService.loctionKey,weatherData[0]?.Temperature.Metric.Value)">Add
+                    City To Favorites <i class="icon-heart text-danger" aria-hidden="true"></i></button></h3>
+            <div class="align-items-center justify-content-center my-4 alert alert-primary ">
+                Celsius<mat-slide-toggle (change)="toggleView($event)">Fahrenheit</mat-slide-toggle>
+            </div>
+            <div class="text-center my-4 alert alert-primary" *ngIf="toggle">
+                <p class="text-center">
+                    Temperature in Degrees Celsius: {{ weatherData[0]?.Temperature.Metric.Value}}
+                </p>
+            </div>
+            <div class="text-center my-4 alert alert-primary" *ngIf="!toggle">
+                <p class="text-center">
+                    Temperature in Degrees Fahrenheit: {{ weatherData[0]?.Temperature.Imperial.Value}}
+                </p>
+            </div>
+            <p class="text-center my-4 alert alert-primary">
+                Current State - {{weatherData[0]?.WeatherText}}
+            </p>
+        </div>
+    </div>
+</div>
+<br><br>
+<h3 class="text-center my-8 alert alert-primary">5 Days Forecast- {{ apixuService.cityName }}</h3>
+<div class="container bgWhite">
+    <div class="row align-items-center justify-content-center">     
+        <div class="col-lg-4 col-md-6 mb-4 " *ngFor="let day of Days5yWeatherData.DailyForecasts">
+            <div class="card bg-light mb-3" style="width: 18rem;">
+                <div class="card-header">Date: {{day?.EpochDate * 1000 | date}}</div>
+                <div class="card-body">
+                    <div class="card-footer bg-transparent border-success">
+                        <h2>Min Degrees Celsius: {{((day?.Temperature.Minimum.Value - 32) * 5.0/9.0).toFixed(1)}}</h2>
+                    </div>
+                    <div class="card-footer bg-transparent border-success">
+                        <h2>Max Degrees Celsius: {{((day?.Temperature.Maximum.Value - 32) * 5.0/9.0).toFixed(1)}}</h2>
+                    </div>
+                </div>
+            </div>
+        </div> 
+</div>
+</div>
+<br><br>
+<notifier-container></notifier-container>
